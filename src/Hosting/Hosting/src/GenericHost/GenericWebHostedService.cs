@@ -65,7 +65,7 @@ namespace Microsoft.AspNetCore.Hosting
         {
             HostingEventSource.Log.HostStart();
 
-            var serverAddressesFeature = Server.Features?.Get<IServerAddressesFeature>();
+            var serverAddressesFeature = Server.Features.Get<IServerAddressesFeature>();
             var addresses = serverAddressesFeature?.Addresses;
             if (addresses != null && !addresses.IsReadOnly && addresses.Count == 0)
             {
@@ -92,7 +92,7 @@ namespace Microsoft.AspNetCore.Hosting
                     throw new InvalidOperationException($"No application configured. Please specify an application via IWebHostBuilder.UseStartup, IWebHostBuilder.Configure, or specifying the startup assembly via {nameof(WebHostDefaults.StartupAssemblyKey)} in the web host configuration.");
                 }
 
-                var builder = ApplicationBuilderFactory.CreateBuilder(Server.Features!);
+                var builder = ApplicationBuilderFactory.CreateBuilder(Server.Features);
 
                 foreach (var filter in StartupFilters.Reverse())
                 {
