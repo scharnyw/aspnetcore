@@ -131,7 +131,7 @@ namespace Microsoft.AspNetCore.Certificates.Generation
         internal override void CorrectCertificateState(X509Certificate2 candidate)
         {
             var status = CheckCertificateState(candidate, true);
-            if (!status.Result)
+            if (!status.Success)
             {
                 throw new InvalidOperationException(InvalidCertificateState);
             }

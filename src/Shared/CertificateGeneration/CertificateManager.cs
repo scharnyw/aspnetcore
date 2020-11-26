@@ -204,7 +204,7 @@ namespace Microsoft.AspNetCore.Certificates.Generation
                     foreach (var candidate in currentUserCertificates)
                     {
                         var status = CheckCertificateState(candidate, true);
-                        if (!status.Result)
+                        if (!status.Success)
                         {
                             try
                             {
@@ -990,12 +990,12 @@ namespace Microsoft.AspNetCore.Certificates.Generation
 
         internal struct CheckCertificateStateResult
         {
-            public bool Result { get; }
+            public bool Success { get; }
             public string? FailureMessage { get; }
 
-            public CheckCertificateStateResult(bool result, string? failureMessage)
+            public CheckCertificateStateResult(bool success, string? failureMessage)
             {
-                Result = result;
+                Success = success;
                 FailureMessage = failureMessage;
             }
         }
