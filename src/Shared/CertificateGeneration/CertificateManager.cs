@@ -991,12 +991,12 @@ namespace Microsoft.AspNetCore.Certificates.Generation
         internal struct CheckCertificateStateResult
         {
             public bool Result { get; }
-            public string? Message { get; }
+            public string? FailureMessage { get; }
 
-            public CheckCertificateStateResult(bool result, string? message)
+            public CheckCertificateStateResult(bool result, string? failureMessage)
             {
                 Result = result;
-                Message = message;
+                FailureMessage = failureMessage;
             }
         }
 

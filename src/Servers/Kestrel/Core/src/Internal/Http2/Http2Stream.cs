@@ -22,15 +22,15 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2
 {
     internal abstract partial class Http2Stream : HttpProtocol, IThreadPoolWorkItem, IDisposable
     {
-        private Http2StreamContext _context = default!; // Always initialized with a value
-        private Http2OutputProducer _http2Output = default!; // Always initialized with a value
-        private StreamInputFlowControl _inputFlowControl = default!; // Always initialized with a value
-        private StreamOutputFlowControl _outputFlowControl = default!; // Always initialized with a value
+        private Http2StreamContext _context = default!;
+        private Http2OutputProducer _http2Output = default!;
+        private StreamInputFlowControl _inputFlowControl = default!;
+        private StreamOutputFlowControl _outputFlowControl = default!;
         private Http2MessageBody? _messageBody;
 
         private bool _decrementCalled;
 
-        public Pipe RequestBodyPipe { get; private set; } = default!; // Always initialized with a value
+        public Pipe RequestBodyPipe { get; private set; } = default!;
 
         internal long DrainExpirationTicks { get; set; }
 

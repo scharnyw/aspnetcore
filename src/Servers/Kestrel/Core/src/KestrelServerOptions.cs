@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -192,7 +193,8 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
                             // case. The underlying implementation of this check is specific to Mac OS and is handled within CheckCertificateState.
                             // Kestrel must NEVER cause a UI prompt on a production system. We only attempt this here because Mac OS is not supported
                             // in production.
-                            logger.DeveloperCertificateFirstRun(status.Message!);
+                            Debug.Assert(status.FailureMessage != null, "Status with a failure result must have a message.");
+                            logger.DeveloperCertificateFirstRun(status.FailureMessage);
 
                             // Now that we've displayed a warning in the logs so that the user gets a notification that a prompt might appear, try
                             // and access the certificate key, which might trigger a prompt.

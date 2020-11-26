@@ -297,7 +297,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
                     return;
                 }
 
-                Debug.Assert(Options.ConfigurationLoader != null); // TODO - Can ConfigurationLoader be null here?
+                Debug.Assert(Options.ConfigurationLoader != null, "Rebind can only happen when there is a ConfigurationLoader.");
 
                 reloadToken = Options.ConfigurationLoader.Configuration.GetReloadToken();
                 var (endpointsToStop, endpointsToStart) = Options.ConfigurationLoader.Reload();
@@ -306,7 +306,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
 
                 if (endpointsToStop.Count > 0)
                 {
-                    var urlsToStop = endpointsToStop.Select(lo => lo.EndpointConfig?.Url ?? "<unknown>");
+                    var urlsToStop = endpointsToStop.Select(lo => lo.EndpointConfig!.Url);
                     Trace.LogInformation("Config changed. Stopping the following endpoints: '{endpoints}'", string.Join("', '", urlsToStop));
 
                     // 5 is the default value for WebHost's "shutdownTimeoutSeconds", so use that.
@@ -315,7 +315,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
 
                     // TODO: It would be nice to start binding to new endpoints immediately and reconfigured endpoints as soon
                     // as the unbinding finished for the given endpoint rather than wait for all transports to unbind first.
-                    var configsToStop = endpointsToStop.Select(lo => lo.EndpointConfig).ToList();
+                    var configsToStop = endpointsToStop.Select(lo => lo.EndpointConfig!).ToList();
                     await _transportManager.StopEndpointsAsync(configsToStop, combinedCts.Token).ConfigureAwait(false);
 
                     foreach (var listenOption in endpointsToStop)
@@ -327,7 +327,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
 
                 if (endpointsToStart.Count > 0)
                 {
-                    var urlsToStart = endpointsToStart.Select(lo => lo.EndpointConfig?.Url ?? "<unknown>");
+                    var urlsToStart = endpointsToStart.Select(lo => lo.EndpointConfig!.Url);
                     Trace.LogInformation("Config changed. Starting the following endpoints: '{endpoints}'", string.Join("', '", urlsToStart));
 
                     foreach (var listenOption in endpointsToStart)
@@ -339,7 +339,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
                         }
                         catch (Exception ex)
                         {
-                            Trace.LogCritical(0, ex, "Unable to bind to '{url}' on config reload.", listenOption.EndpointConfig?.Url ?? "<unknown>");
+                            Trace.LogCritical(0, ex, "Unable to bind to '{url}' on config reload.", listenOption.EndpointConfig!.Url);
                         }
                     }
                 }

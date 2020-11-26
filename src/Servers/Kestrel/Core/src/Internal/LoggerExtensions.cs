@@ -28,8 +28,8 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal
                 new EventId(2, "FailedToLocateDevelopmentCertificateFile"),
                 "Failed to locate the development https certificate at '{certificatePath}'.");
 
-        private static readonly Action<ILogger, string?, Exception?> _failedToLoadDevelopmentCertificate =
-            LoggerMessage.Define<string?>(
+        private static readonly Action<ILogger, string, Exception?> _failedToLoadDevelopmentCertificate =
+            LoggerMessage.Define<string>(
                 LogLevel.Debug,
                 new EventId(3, "FailedToLoadDevelopmentCertificate"),
                 "Failed to load the development https certificate at '{certificatePath}'.");
@@ -64,7 +64,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal
 
         public static void FailedToLocateDevelopmentCertificateFile(this ILogger<KestrelServer> logger, string certificatePath) => _failedToLocateDevelopmentCertificateFile(logger, certificatePath, null);
 
-        public static void FailedToLoadDevelopmentCertificate(this ILogger<KestrelServer> logger, string? certificatePath) => _failedToLoadDevelopmentCertificate(logger, certificatePath, null);
+        public static void FailedToLoadDevelopmentCertificate(this ILogger<KestrelServer> logger, string certificatePath) => _failedToLoadDevelopmentCertificate(logger, certificatePath, null);
 
         public static void BadDeveloperCertificateState(this ILogger<KestrelServer> logger) => _badDeveloperCertificateState(logger, null);
 

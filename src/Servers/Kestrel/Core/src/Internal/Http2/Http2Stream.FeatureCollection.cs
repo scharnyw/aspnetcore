@@ -19,7 +19,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2
     {
         private IHeaderDictionary? _userTrailers;
 
-        IHeaderDictionary? IHttpResponseTrailersFeature.Trailers
+        IHeaderDictionary IHttpResponseTrailersFeature.Trailers
         {
             get
             {
@@ -35,6 +35,11 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2
             }
             set
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 _userTrailers = value;
             }
         }

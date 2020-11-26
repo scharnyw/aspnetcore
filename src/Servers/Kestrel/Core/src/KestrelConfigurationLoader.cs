@@ -440,13 +440,13 @@ namespace Microsoft.AspNetCore.Server.Kestrel
         private (X509Certificate2?, CertificateConfig?) FindDeveloperCertificateFile()
         {
             string? certificatePath = null;
-            try
+            if (ConfigurationReader.Certificates.TryGetValue("Development", out var certificateConfig) &&
+                certificateConfig.Path == null &&
+                certificateConfig.Password != null &&
+                TryGetCertificatePath(out certificatePath) &&
+                File.Exists(certificatePath))
             {
-                if (ConfigurationReader.Certificates.TryGetValue("Development", out var certificateConfig) &&
-                    certificateConfig.Path == null &&
-                    certificateConfig.Password != null &&
-                    TryGetCertificatePath(out certificatePath) &&
-                    File.Exists(certificatePath))
+                try
                 {
                     var certificate = new X509Certificate2(certificatePath, certificateConfig.Password);
 
@@ -455,14 +455,14 @@ namespace Microsoft.AspNetCore.Server.Kestrel
                         return (certificate, certificateConfig);
                     }
                 }
-                else if (!string.IsNullOrEmpty(certificatePath))
+                catch (CryptographicException)
                 {
-                    Logger.FailedToLocateDevelopmentCertificateFile(certificatePath);
+                    Logger.FailedToLoadDevelopmentCertificate(certificatePath);
                 }
             }
-            catch (CryptographicException)
+            else if (!string.IsNullOrEmpty(certificatePath))
             {
-                Logger.FailedToLoadDevelopmentCertificate(certificatePath);
+                Logger.FailedToLocateDevelopmentCertificateFile(certificatePath);
             }
 
             return (null, null);

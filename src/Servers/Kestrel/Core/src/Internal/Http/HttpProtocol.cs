@@ -71,7 +71,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
 
         private long _responseBytesWritten;
 
-        private HttpConnectionContext _context = default!; // Always initialized with a value
+        private HttpConnectionContext _context = default!;
         private RouteValueDictionary? _routeValues;
         private Endpoint? _endpoint;
 
@@ -91,7 +91,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
             HttpResponseControl = this;
         }
 
-        public IHttpResponseControl HttpResponseControl { get; set; } = default!; // Always initialized with a value
+        public IHttpResponseControl HttpResponseControl { get; set; } = default!;
 
         public ServiceContext ServiceContext => _context.ServiceContext;
         private IPEndPoint? LocalEndPoint => _context.LocalEndPoint;
@@ -99,15 +99,15 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
         public ITimeoutControl TimeoutControl => _context.TimeoutControl;
 
         public IFeatureCollection ConnectionFeatures => _context.ConnectionFeatures;
-        public IHttpOutputProducer Output { get; protected set; } = default!; // Always initialized with a value
+        public IHttpOutputProducer Output { get; protected set; } = default!;
 
         protected IKestrelTrace Log => ServiceContext.Log;
         private DateHeaderValueManager DateHeaderValueManager => ServiceContext.DateHeaderValueManager;
         // Hold direct reference to ServerOptions since this is used very often in the request processing path
-        protected KestrelServerOptions ServerOptions { get; set; } = default!; // Always initialized with a value
+        protected KestrelServerOptions ServerOptions { get; set; } = default!;
         protected string ConnectionId => _context.ConnectionId;
 
-        public string ConnectionIdFeature { get; set; } = default!; // Always initialized with a value
+        public string ConnectionIdFeature { get; set; } = default!;
         public bool HasStartedConsumingRequestBody { get; set; }
         public long? MaxRequestBodySize { get; set; }
         public MinDataRate? MinRequestBodyDataRate { get; set; }
@@ -914,7 +914,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
             }
 
             if (_httpVersion != Http.HttpVersion.Http10 &&
-                RequestHeaders!.TryGetValue(HeaderNames.Expect, out var expect) &&
+                ((IHeaderDictionary)HttpRequestHeaders).TryGetValue(HeaderNames.Expect, out var expect) &&
                 (expect.FirstOrDefault() ?? "").Equals("100-continue", StringComparison.OrdinalIgnoreCase))
             {
                 Output.Write100ContinueAsync().GetAwaiter().GetResult();

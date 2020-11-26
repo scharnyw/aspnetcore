@@ -75,7 +75,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
         /// Enables connection middleware to resolve and use services registered by the application during startup.
         /// Only set if accessed from the callback of a <see cref="KestrelServerOptions"/> Listen* method.
         /// </summary>
-        public KestrelServerOptions KestrelServerOptions { get; internal set; } = default!; // TODO - Always available?
+        public KestrelServerOptions KestrelServerOptions { get; internal set; } = default!; // Set via ConfigureKestrel callback
 
         /// <summary>
         /// The protocols enabled on this endpoint.
