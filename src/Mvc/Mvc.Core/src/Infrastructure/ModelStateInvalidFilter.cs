@@ -56,9 +56,6 @@ namespace Microsoft.AspNetCore.Mvc.Infrastructure
         /// </remarks>
         public int Order => FilterOrder;
 
-        /// <inheritdoc />
-        public bool IsReusable => true;
-
         /// <summary>
         /// Invoked when an action is executed.
         /// </summary>
